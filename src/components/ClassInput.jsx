@@ -23,6 +23,13 @@ class ClassInput extends Component {
     this.handleInputChange = this.handleInputChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleDelete = this.handleDelete.bind(this);
+    this.handleEdits = this.handleEdits.bind(this);
+  }
+
+  handleEdits(e) {
+    const btn = e.target;
+    btn.textContent = btn.textContent.includes("Edit") ? "Resubmit" : "Edit";
+    alert(btn.textContent);
   }
 
   handleDelete(index) {
@@ -79,6 +86,14 @@ class ClassInput extends Component {
                 {todo}
                 <button onClick={() => this.handleDelete(index)} type="button">
                   Delete
+                </button>
+
+                <button
+                  className="editBtn"
+                  onClick={(e) => this.handleEdits(e)}
+                  type="button"
+                >
+                  Edit {index}
                 </button>
               </li>
             ),
