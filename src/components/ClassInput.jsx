@@ -18,18 +18,36 @@ class ClassInput extends Component {
     this.state = {
       todos: ["Just some demo tasks", "As an example"],
       inputVal: "",
+      editValue: "",
+      editingIndex: null,
     };
 
     this.handleInputChange = this.handleInputChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleDelete = this.handleDelete.bind(this);
     this.handleEdits = this.handleEdits.bind(this);
+    this.handleEditSubmit = this.handleEditSubmit.bind(this);
   }
 
-  handleEdits(e) {
-    const btn = e.target;
-    btn.textContent = btn.textContent.includes("Edit") ? "Resubmit" : "Edit";
-    alert(btn.textContent);
+  handleEdits(index) {
+    this.setState((state) => ({
+      editingIndex: index,
+      editValue: state.todos[index],
+    }));
+  }
+
+  handleEditSubmit(e) {
+    e.preventDefault();
+    const { editingIndex, editValue } = this.state;
+    this.setState((state) => {
+      const todos = [...state.todos];
+      todos[editingIndex] = editValue;
+      return {
+        todos,
+        editingIndex: null, // Reset editing state
+        editValue: "", // Reset edit value
+      };
+    });
   }
 
   handleDelete(index) {
@@ -83,18 +101,36 @@ class ClassInput extends Component {
               index, // keep track of the index the 2nd argument of map
             ) => (
               <li key={todo}>
-                {todo}
-                <button onClick={() => this.handleDelete(index)} type="button">
-                  Delete
-                </button>
+                {this.state.editingIndex === index ? (
+                  <form onSubmit={this.handleEditSubmit}>
+                    <input
+                      type="text"
+                      value={this.state.editValue}
+                      onChange={(e) =>
+                        this.setState({ editValue: e.target.value })
+                      }
+                    />
+                    <button type="submit">Resubmit</button>
+                  </form>
+                ) : (
+                  <>
+                    {todo}
+                    <button
+                      onClick={() => this.handleDelete(index)}
+                      type="button"
+                    >
+                      Delete
+                    </button>
 
-                <button
-                  className="editBtn"
-                  onClick={(e) => this.handleEdits(e)}
-                  type="button"
-                >
-                  Edit {index}
-                </button>
+                    <button
+                      className="editBtn"
+                      onClick={() => this.handleEdits(index)}
+                      type="button"
+                    >
+                      Edit
+                    </button>
+                  </>
+                )}
               </li>
             ),
           )}
