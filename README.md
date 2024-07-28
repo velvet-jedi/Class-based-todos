@@ -10,6 +10,7 @@ ANS: Using filter in a handleDelete function triggered onclick
 
 2.  Implement a new class component, `Count` that displays the count of the number of todos, at any given time.
 
+ANS: A class is still a component in react, the Count component needs access to the todos array, render the length of the todos state variable, so ClassInput passess todos as a prop and Count compnent descrtuctures it
 
 ------------------------------------------------------------------------------
 
